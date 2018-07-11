@@ -3,9 +3,11 @@ from .errors import (
     RateLimitException, InvalidRequestException, UnknownException
 )
 from .form import Form
+from .workspace import Workspace
 
 __all__ = [
     'Form',
+    'Workspace',
     'TypeFormException',
     'NotFoundException',
     'NotAuthorizedException',
