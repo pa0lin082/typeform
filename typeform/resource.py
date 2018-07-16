@@ -3,9 +3,9 @@ import pprint
 from typeform.client import Client
 
 
-
 class ResourceNotFound(Exception):
     pass
+
 
 class MultipleResourcesFound(Exception):
     pass
@@ -33,8 +33,14 @@ class Resource(Client):
         # raise NotImplementedError()
 
     def get_api_object_ref(self):
+
+        if getattr(self, 'href', None):
+            href = self.href
+        elif self.id:
+            href = '{}/{}/{}'.format(self.BASE_URL, self.model_path, self.id)
+
         return {
-            'href': self.href
+            'href': href
         }
 
     @classmethod
@@ -51,17 +57,15 @@ class Resource(Client):
         else:
             raise MultipleResourcesFound()
 
-
     @classmethod
     def search(cls, term):
 
         return cls.all(search_term=term)
 
-
     @classmethod
     def all(cls, search_term=None):
 
-        params =  dict()
+        params = dict()
         if search_term:
             params['search'] = search_term
 
@@ -103,7 +107,6 @@ class Resource(Client):
         del self
         return True
 
-
     def save(self):
         if self.id:
             return self._update()
@@ -121,6 +124,11 @@ class Resource(Client):
         data = self.prepare_data_for_create()
 
         path = '{}'.format(self.model_path)
+
+        print('Typeform resource _create ', path)
+        pprint.pprint(data)
+
+        
         resp = self._request('POST', path, data=data)
         if 'self' in resp:
             resp['href'] = resp.pop('self').get('href')
