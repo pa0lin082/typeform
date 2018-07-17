@@ -128,7 +128,7 @@ class Resource(Client):
         print('Typeform resource _create ', path)
         pprint.pprint(data)
 
-        
+
         resp = self._request('POST', path, data=data)
         if 'self' in resp:
             resp['href'] = resp.pop('self').get('href')

@@ -81,6 +81,7 @@ class Form(Resource):
         data = {
             'title': self.title,
             'fields': self.fields,
+            'theme': self.theme,
             'hidden': getattr(self, 'hidden', []),
             'workspace': self.workspace.get_api_object_ref()
         }
