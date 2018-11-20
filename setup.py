@@ -5,7 +5,7 @@ with open('README.rst') as fp:
 
 setup(
     name='typeform',
-    version='0.1.1',
+    version='0.1.2',
     description='HTTP API client for TypeForm',
     long_description=long_description,
     keywords=[
