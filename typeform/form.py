@@ -82,8 +82,17 @@ class Form(Resource):
             'title': self.title,
             'fields': self.fields,
             'theme': self.theme,
-            'hidden': getattr(self, 'hidden', []),
-            'workspace': self.workspace.get_api_object_ref()
+            'hidden': getattr(self, 'hidden', [])
         }
+
+        if self.workspace:
+            data['workspace'] = self.workspace.get_api_object_ref()
+
+        if self.thankyou_screens:
+            data['thankyou_screens'] = self.thankyou_screens
+
+        if self.welcome_screens:
+            data['welcome_screens'] = self.welcome_screens
+
         return data
 

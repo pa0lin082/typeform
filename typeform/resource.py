@@ -14,12 +14,13 @@ class MultipleResourcesFound(Exception):
 class Resource(Client):
     model_path = None
 
-    def __init__(self, id=None, *args, **kwargs):
+    def __init__(self, id=None, href=None, *args, **kwargs):
         """Constructor for TypeForm Resource API client"""
 
         assert self.model_path, 'self.model_path is not setted for {}'.format(self.__class__.__name__)
 
         self.id = id
+        self.href = href
         self.populate_from_api(kwargs)
         super(Resource, self).__init__()
 
