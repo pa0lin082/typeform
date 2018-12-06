@@ -22,7 +22,7 @@ class Client(object):
         self._client = requests.Session()
         self._client.headers = {
             'User-Agent': 'python-typeform/0.1.1',
-            'Content-type': 'application/json',
+            # 'Content-type': 'application/json',
             'Authorization': 'Bearer {}'.format(self.api_key)
         }
 
