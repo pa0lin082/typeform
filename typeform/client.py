@@ -17,12 +17,12 @@ class Client(object):
         super(Client, self).__init__()
 
         assert self.api_key, 'Set API_KEY use {}.config(api_key) '.format(self.__class__.__name__)
-
+        # print('Typeform.Client __init__',self.api_key)
         # self.api_key = api_key
         self._client = requests.Session()
         self._client.headers = {
             'User-Agent': 'python-typeform/0.1.1',
-            # 'Content-type': 'application/json',
+            'Content-type': 'application/json',
             'Authorization': 'Bearer {}'.format(self.api_key)
         }
 
@@ -83,5 +83,5 @@ class Client(object):
 
         # Hmm, not sure how we got here, just raise hell
         raise UnknownException(
-            'typeform client received unknown response status code {code!r}'.format(code=resp.status_code)
+            'typeform client received unknown response status code {code!r} message:{message}'.format(code=resp.status_code, message=message)
         )

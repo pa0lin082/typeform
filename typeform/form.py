@@ -3,6 +3,23 @@ import pprint
 from typeform.resource import Resource
 from .errors import NotFoundException
 from .form_response import FormResponses
+from contextlib import contextmanager
+
+
+@contextmanager
+def non_json_client(client):
+
+    orig_headers = client.headers
+    client.headers = dict(((k,v) for (k,v) in orig_headers.items() if k != 'Content-type'))
+
+    try:
+        yield client
+    finally:
+        client.headers = orig_headers
+
+
+
+
 
 
 class Form(Resource):
@@ -66,9 +83,12 @@ class Form(Resource):
 
         path = 'forms/{form_id}/responses'.format(form_id=self.id)
         print('path:',path)
-        resp = self._request('GET',path, params=params)
-        pprint.pprint(resp)
-        return FormResponses(stats=resp.get('stats'), responses=resp.get('responses'), questions=resp.get('questions'))
+        with non_json_client(self._client) as c:
+            resp = self._request('GET',path, params=params)
+
+        return resp
+        # pprint.pprint(resp)
+        # return FormResponses(stats=resp.get('stats'), responses=resp.get('responses'), questions=resp.get('questions'))
 
     # def get_response(self, token):
     #     """Get a specific response for this TypeForm Form"""
