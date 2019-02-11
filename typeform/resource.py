@@ -11,6 +11,7 @@ class MultipleResourcesFound(Exception):
     pass
 
 
+
 class Resource(Client):
     model_path = None
 
@@ -21,7 +22,7 @@ class Resource(Client):
 
         self.id = id
         self.href = href
-        self.populate_from_api(kwargs)
+        self.populate_from_api(**kwargs)
         super(Resource, self).__init__()
 
     def populate_from_api(self, *args, **kwargs):
@@ -64,14 +65,29 @@ class Resource(Client):
         return cls.all(search_term=term)
 
     @classmethod
-    def all(cls, search_term=None):
+    def search_by_name(cls, term):
+        results = cls.search(term)
+        if results.get('total_items', 0) == 0:
+            return None
+        else:
+            for item in results.get('items'):
+                if item.name == term:
+                    return item
+            return None
 
-        params = dict()
+    @classmethod
+    def all(cls, search_term=None, params=None):
+
+        if params is None:
+            params = dict()
         if search_term:
             params['search'] = search_term
 
+        params['page_size'] = 200
+
         path = '{}'.format(cls.model_path)
         resp = cls()._request('GET', path, params=params)
+
 
         items = resp.get('items')
         for i in items:
